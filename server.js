@@ -11,11 +11,21 @@ const server = http.createServer((req, res) => {
     "Content-Type": "application/json",
     "X-Powered-By": "Node.js",
   });
+
+  let body = [];
+  req
+    .on("data", (chunck) => {
+      body.push(chunck);
+    })
+    .on("end", () => {
+      body = Buffer.concat(body).toString();
+      console.log(body);
+    });
+
   res.end(
     JSON.stringify({
-      success: false,
-      error: "Not Found",
-      data: null,
+      success: true,
+      data: todos,
     })
   );
 });
