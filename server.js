@@ -7,16 +7,15 @@ const todos = [
 ];
 
 const server = http.createServer((req, res) => {
-  // res.setHeader("Content-Type", "text/html");
-  // res.setHeader("Content-Type", "text/plain");
-  res.setHeader("Content-Type", "application/json");
-  res.setHeader("X-Powered-By", "Node.js");
-  res.write("<h1> Hello </h1>");
-  res.write("<h2> How Are You? </h2>");
+  res.writeHead(404, {
+    "Content-Type": "application/json",
+    "X-Powered-By": "Node.js",
+  });
   res.end(
     JSON.stringify({
-      success: true,
-      data: todos,
+      success: false,
+      error: "Not Found",
+      data: null,
     })
   );
 });
@@ -24,3 +23,23 @@ const server = http.createServer((req, res) => {
 const PORT = 5000;
 
 server.listen(PORT, () => console.log(`Server Running On Port ${PORT}`));
+
+// HTTP Status Code
+
+// 1.XX Infomational
+
+// 2.XX Success
+// 200 Success
+// 201 Created
+// 204 No Content
+
+// 3.XX Redirection
+// 304 Not Modified
+
+// 4.XX Client Error
+// 400 Bad Request
+// 401 Unauthorized
+// 404 Not Found
+
+// 5.XX Server Error
+// 500 Internal Server Error
