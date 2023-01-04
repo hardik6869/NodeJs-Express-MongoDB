@@ -7,11 +7,7 @@ const todos = [
 ];
 
 const server = http.createServer((req, res) => {
-  res.writeHead(404, {
-    "Content-Type": "application/json",
-    "X-Powered-By": "Node.js",
-  });
-
+  const { method, url } = req;
   let body = [];
   req
     .on("data", (chunck) => {
@@ -19,37 +15,36 @@ const server = http.createServer((req, res) => {
     })
     .on("end", () => {
       body = Buffer.concat(body).toString();
-      console.log(body);
+      let status = 404;
+      const response = {
+        success: false,
+        data: null,
+        error: null,
+      };
+      if (method === "GET" && url === "/todos") {
+        status = 200;
+        response.success = true;
+        response.data = todos;
+      } else if (method === "POST" && url === "/todos") {
+        const { id, text } = JSON.parse(body);
+        if (!id || !text) {
+          status = 400;
+          response.error = "Please add id and text";
+        } else {
+          todos.push({ id, text });
+          status = 201;
+          response.status = true;
+          response.data = todos;
+        }
+      }
+      res.writeHead(status, {
+        "Content-Type": "application/json",
+        "X-Powered-By": "Node.js",
+      });
+      res.end(JSON.stringify(response));
     });
-
-  res.end(
-    JSON.stringify({
-      success: true,
-      data: todos,
-    })
-  );
 });
 
 const PORT = 5000;
 
 server.listen(PORT, () => console.log(`Server Running On Port ${PORT}`));
-
-// HTTP Status Code
-
-// 1.XX Infomational
-
-// 2.XX Success
-// 200 Success
-// 201 Created
-// 204 No Content
-
-// 3.XX Redirection
-// 304 Not Modified
-
-// 4.XX Client Error
-// 400 Bad Request
-// 401 Unauthorized
-// 404 Not Found
-
-// 5.XX Server Error
-// 500 Internal Server Error

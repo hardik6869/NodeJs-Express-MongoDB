@@ -36,3 +36,10 @@
 
 - 5.XX Server Error
 - 500 Internal Server Error
+
+#### - HTTP REQUEST METHOD
+
+- GET - Retrieve Resource
+- POST - Submit Resource
+- PUT/PATCH - Update Resource
+- DELETE - Delete Resource
