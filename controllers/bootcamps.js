@@ -84,7 +84,7 @@ exports.getBootcamps = asyncHandler(async (req, res, next) => {
 // @route   GET /api/v1/bootcamps/:id
 // @access  Public
 exports.getBootcamp = asyncHandler(async (req, res, next) => {
-  const bootcamp = await bootcamp.findById(req.params.id);
+  const bootcamp = await Bootcamp.findById(req.params.id);
   if (!bootcamp) {
     return next(
       new ErrorResponse(`Bootcamp not found with id of ${req.params.id}`, 404)
@@ -97,7 +97,7 @@ exports.getBootcamp = asyncHandler(async (req, res, next) => {
 // @route   POST /api/v1/bootcamps
 // @access  Private
 exports.createBootcamp = asyncHandler(async (req, res, next) => {
-  const bootcamp = await bootcamp.create(req.body);
+  const bootcamp = await Bootcamp.create(req.body);
   res.status(201).json({
     success: true,
     data: bootcamp,
@@ -108,7 +108,7 @@ exports.createBootcamp = asyncHandler(async (req, res, next) => {
 // @route   PUT /api/v1/bootcamps/:id
 // @access  Private
 exports.updateBootcamp = asyncHandler(async (req, res, next) => {
-  const bootcamp = await bootcamp.findByIdAndUpdate(req.params.id, req.body, {
+  const bootcamp = await Bootcamp.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true,
   });
@@ -124,7 +124,7 @@ exports.updateBootcamp = asyncHandler(async (req, res, next) => {
 // @route   DELETE /api/v1/bootcamps/:id
 // @access  Private
 exports.deleteBootcamp = asyncHandler(async (req, res, next) => {
-  const bootcamp = await bootcamp.findById(req.params.id);
+  const bootcamp = await Bootcamp.findById(req.params.id);
   if (!bootcamp) {
     return next(
       new ErrorResponse(`Bootcamp not found with id of ${req.params.id}`, 404)
@@ -148,7 +148,7 @@ exports.getBootcampsInRadius = asyncHandler(async (req, res, next) => {
   // Divide dist by radius of earth
   // Earth Radius = 3,963 mi / 6,378 km
   const radius = distance / 3963;
-  const bootcamps = await bootcamps.find({
+  const bootcamps = await Bootcamp.find({
     location: { $geoWithin: { $centerSphere: [[lng, lat], radius] } },
   });
   res.status(200).json({
