@@ -26,7 +26,7 @@ const importData = async () => {
     // Connect to DB
     await mongoose.connect(process.env.MONGO_URI);
     await Bootcamp.create(bootcamps);
-    // await Course.create(courses);
+    await Course.create(courses);
     console.log("Data Inserted...".green.inverse);
     process.exit();
   } catch (error) {
