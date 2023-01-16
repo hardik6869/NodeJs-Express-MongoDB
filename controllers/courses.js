@@ -51,9 +51,7 @@ exports.addCourse = asyncHandler(async (req, res, next) => {
       404
     );
   }
-
   const course = await Course.create(req.body);
-
   res.status(200).json({ success: true, data: course });
 });
 
@@ -68,12 +66,10 @@ exports.updateCourse = asyncHandler(async (req, res, next) => {
       404
     );
   }
-
   course = await Course.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true,
   });
-
   res.status(200).json({ success: true, data: course });
 });
 
@@ -88,8 +84,6 @@ exports.deleteCourse = asyncHandler(async (req, res, next) => {
       404
     );
   }
-
   await course.remove();
-
   res.status(200).json({ success: true, data: {} });
 });
