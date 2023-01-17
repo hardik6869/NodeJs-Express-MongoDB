@@ -1,6 +1,5 @@
 const fs = require("fs");
 const mongoose = require("mongoose");
-const connectDB = require("./config/db");
 const colors = require("colors");
 const dotenv = require("dotenv");
 
