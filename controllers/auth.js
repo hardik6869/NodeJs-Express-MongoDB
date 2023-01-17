@@ -35,14 +35,12 @@ exports.login = asyncHandler(async (req, res, next) => {
 
   // Check for user
   const user = await User.findOne({ email }).select("+password");
-
   if (!user) {
     return next(new ErrorResponse("Invalid Credentials", 401));
   }
 
   // Check if password matches
   const isMatch = await user.matchPassword(password);
-
   if (!isMatch) {
     return next(new ErrorResponse("Invalid Credentials", 401));
   }
@@ -51,4 +49,13 @@ exports.login = asyncHandler(async (req, res, next) => {
   const token = user.getSignedJwtToken();
 
   res.status(200).json({ success: true, token });
+});
+
+// @desc    Get current logged in user
+// @route   POST /api/v1/auth/login
+// @access  Private
+exports.getMe = asyncHandler(async (req, res, next) => {
+  const user = await User.findById(req.user.id);
+
+  res.status(200).json({ success: true, data: user });
 });
