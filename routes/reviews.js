@@ -1,15 +1,16 @@
 const express = require("express");
 const advancedResults = require("../middleware/advanceResults");
 const Review = require("../models/Review");
-const { getReviews, getReview } = require("../controllers/review");
+const { getReviews, getReview, addReview } = require("../controllers/review");
 const router = express.Router({ mergeParams: true });
-
+const { protect, authorize } = require("../middleware/auth");
 router
   .route("/")
   .get(
     advancedResults(Review, { path: "bootcamp", select: "name description" }),
     getReviews
-  );
+  )
+  .post(protect, authorize("user", "admin"), addReview);
 
 router.route("/:id").get(getReview);
 
