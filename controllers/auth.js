@@ -52,6 +52,17 @@ exports.getMe = asyncHandler(async (req, res, next) => {
   res.status(200).json({ success: true, data: user });
 });
 
+// @desc    Log user out / Clear cookie
+// @route   GET /api/v1/auth/logout
+// @access  Private
+exports.logout = asyncHandler(async (req, res, next) => {
+  res.cookie("token", "none", {
+    expires: new Date(Date.now() + 10 * 1000),
+    httpOnly: true,
+  });
+  res.status(200).json({ success: true, data: {} });
+});
+
 // @desc    Update user details
 // @route   PUT /api/v1/auth/updatedetails
 // @access  Private
@@ -152,18 +163,16 @@ exports.resetPassword = asyncHandler(async (req, res, next) => {
 const sendTokenResponse = (user, statusCode, res) => {
   // Create Token
   const token = user.getSignedJwtToken();
-
   const options = {
-    expire: new Date(
+    expires: new Date(
       Date.now() + process.env.JWT_COOKIE_EXPIRE * 24 * 60 * 60 * 1000
     ),
     httpOnly: true,
   };
 
-  if (process.env.NODE_ENV) {
-    options.secure = true;
-  }
-
+  // if (process.env.NODE_ENV) {
+  //   options.secure = true;
+  // }
   res
     .status(statusCode)
     .cookie("token", token, options)
